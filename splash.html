@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>She-Gym — Welcome to the Sanctuary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" aria-label="Toggle theme">◐ Light</button>
+
+<main class="splash">
+  <div class="glow-orb glow-orb--primary glow-orb--top-left" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--tertiary glow-orb--bottom-right" aria-hidden="true"></div>
+
+  <div class="splash__content">
+    <div class="logo-container">
+      <svg class="logo-mark" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SheGym">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"  stop-color="var(--color-primary)" />
+            <stop offset="100%" stop-color="var(--color-tertiary)" />
+          </linearGradient>
+        </defs>
+        <text x="210" y="120" text-anchor="middle"
+              font-family="Bricolage Grotesque, serif"
+              font-size="92"
+              font-weight="800"
+              letter-spacing="-2"
+              fill="url(#logoGrad)">SheGym</text>
+        <text x="210" y="160" text-anchor="middle"
+              font-family="Manrope, sans-serif"
+              font-size="14"
+              font-weight="700"
+              letter-spacing="6"
+              fill="var(--color-on-surface-variant)">PURE STRENGTH &amp; GRACE</text>
+      </svg>
+    </div>
+
+    <div class="splash__tagline fade-in fade-in--delay-1">
+      <h1 class="display-lg text-primary text-glow">
+        Strong Mind. <br class="md-only">
+        Strong Body. <br class="md-only">
+        <span class="text-on-surface">Strong You.</span>
+      </h1>
+    </div>
+
+    <p class="splash__welcome label-caps text-cream-dim fade-in fade-in--delay-2" style="letter-spacing: 0.3em;">
+      Welcome to the Sanctuary
+    </p>
+  </div>
+
+  <div class="splash__deco deco-mark">
+    <span class="label-caps text-cream-dim">EST. 2023</span>
+    <div class="divider--vertical"></div>
+  </div>
+</main>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-btn').textContent = isDark ? '◑ Dark' : '◐ Light';
+  }
+  // Show <br> only on mobile via a tiny inline rule (kept here, single place)
+  const css = document.createElement('style');
+  css.textContent = '.md-only { display: inline; } @media (min-width: 768px) { .md-only { display: none; } }';
+  document.head.appendChild(css);
+</script>
+
+</body>
+</html>

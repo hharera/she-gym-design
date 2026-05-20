@@ -1,922 +1,177 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>She-Gym — Claude-Inspired Design Preview</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  /* ===== Design Tokens (Claude-Inspired v1) ===== */
-  :root {
-    /* Light theme */
-    --surface: #FAF7F2;
-    --surface-raised: #FFFFFF;
-    --surface-sunken: #F2EEE5;
-    --border: #E5DFD2;
-    --border-strong: #CDC4B3;
-    --text-primary: #2A2622;
-    --text-secondary: #6E6457;
-    --text-tertiary: #9A9082;
-    --text-inverse: #FAF7F2;
-    --accent: #7E5BB8;
-    --accent-hover: #6B49A3;
-    --accent-surface: #F0EAFA;
-    --accent-on: #FFFFFF;
-    --success: #4A7C59;
-    --warning: #C9963D;
-    --error: #B85450;
-    --info: #5B7FA8;
-
-    /* Typography */
-    --font-serif: 'Source Serif 4', Georgia, serif;
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-
-    /* Spacing */
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 24px;
-    --space-6: 32px;
-    --space-7: 48px;
-    --space-8: 64px;
-    --space-9: 96px;
-
-    /* Radius */
-    --radius-xs: 4px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-full: 9999px;
-
-    /* Elevation */
-    --elev-1: 0 1px 2px rgba(20,15,10,0.04);
-    --elev-2: 0 2px 8px rgba(20,15,10,0.06);
-    --elev-3: 0 8px 24px rgba(20,15,10,0.08);
-
-    /* Motion */
-    --motion-quick: 150ms;
-    --motion-default: 250ms;
-    --easing: cubic-bezier(0.2, 0.0, 0.0, 1.0);
-  }
-
-  [data-theme="dark"] {
-    --surface: #1A1714;
-    --surface-raised: #25211D;
-    --surface-sunken: #14110F;
-    --border: #353029;
-    --border-strong: #4A4338;
-    --text-primary: #F5F1EA;
-    --text-secondary: #B5AC9F;
-    --text-tertiary: #7A7268;
-    --text-inverse: #1A1714;
-    --accent: #9B7CD4;
-    --accent-hover: #B197E0;
-    --accent-surface: #2A2438;
-    --accent-on: #1A1714;
-    --success: #6FA378;
-    --warning: #D9AC5C;
-    --error: #D17774;
-    --info: #7BA0CC;
-    --elev-1: 0 1px 2px rgba(0,0,0,0.3);
-    --elev-2: 0 2px 8px rgba(0,0,0,0.4);
-    --elev-3: 0 8px 24px rgba(0,0,0,0.5);
-  }
-
-  /* ===== Base ===== */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: var(--font-sans);
-    font-size: 15px;
-    line-height: 24px;
-    color: var(--text-primary);
-    background: var(--surface);
-    transition: background var(--motion-default) var(--easing), color var(--motion-default) var(--easing);
-    font-feature-settings: 'cv11', 'ss01';
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ===== Outer page layout ===== */
-  .page-header {
-    padding: var(--space-7) var(--space-6) var(--space-5);
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-  .page-title {
-    font-family: var(--font-serif);
-    font-size: 40px;
-    line-height: 48px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-3);
-  }
-  .page-subtitle {
-    font-size: 17px;
-    line-height: 26px;
-    color: var(--text-secondary);
-    max-width: 640px;
-  }
-  .theme-toggle {
-    position: fixed;
-    top: var(--space-5);
-    right: var(--space-5);
-    z-index: 100;
-    background: var(--surface-raised);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    padding: 10px 16px;
-    border-radius: var(--radius-full);
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: var(--elev-2);
-    transition: background var(--motion-quick) var(--easing);
-  }
-  .theme-toggle:hover { background: var(--surface-sunken); }
-
-  .nav {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 var(--space-6) var(--space-6);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-  .nav a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 14px;
-    padding: 6px 14px;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border);
-    transition: all var(--motion-quick) var(--easing);
-  }
-  .nav a:hover { color: var(--text-primary); border-color: var(--border-strong); background: var(--surface-sunken); }
-
-  .section {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: var(--space-7) var(--space-6);
-    border-top: 1px solid var(--border);
-  }
-  .section-title {
-    font-family: var(--font-serif);
-    font-size: 28px;
-    line-height: 36px;
-    font-weight: 600;
-    margin-bottom: var(--space-2);
-  }
-  .section-lede {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-6);
-    max-width: 640px;
-  }
-
-  /* ===== Token gallery ===== */
-  .swatch-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: var(--space-4);
-  }
-  .swatch {
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--surface-raised);
-  }
-  .swatch-chip { height: 80px; }
-  .swatch-meta { padding: var(--space-3) var(--space-4); }
-  .swatch-name { font-weight: 500; font-size: 14px; }
-  .swatch-hex { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text-tertiary); }
-
-  /* Typography gallery */
-  .type-row { padding: var(--space-3) 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 120px 1fr; gap: var(--space-4); align-items: baseline; }
-  .type-label { font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text-tertiary); }
-  .display-l { font-family: var(--font-serif); font-size: 40px; line-height: 48px; font-weight: 600; }
-  .display-m { font-family: var(--font-serif); font-size: 32px; line-height: 40px; font-weight: 600; }
-  .display-s { font-family: var(--font-serif); font-size: 28px; line-height: 36px; font-weight: 600; }
-  .heading-l { font-family: var(--font-serif); font-size: 24px; line-height: 32px; font-weight: 400; }
-  .heading-m { font-size: 20px; line-height: 28px; font-weight: 600; }
-  .heading-s { font-size: 18px; line-height: 26px; font-weight: 600; }
-  .body-l { font-size: 17px; line-height: 26px; }
-  .body-m { font-size: 15px; line-height: 24px; }
-  .body-s { font-size: 13px; line-height: 20px; }
-  .label-m { font-size: 14px; line-height: 20px; font-weight: 500; }
-  .caption { font-size: 12px; line-height: 16px; }
-
-  /* ===== Component gallery ===== */
-  .comp-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-5);
-  }
-  .comp-card {
-    background: var(--surface-raised);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    box-shadow: var(--elev-1);
-  }
-  .comp-title { font-size: 13px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: var(--space-4); }
-  .comp-stack > * + * { margin-top: var(--space-3); }
-
-  /* ===== She-Gym component classes ===== */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    height: 48px;
-    padding: 0 20px;
-    border-radius: var(--radius-md);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    border: none;
-    cursor: pointer;
-    transition: background var(--motion-quick) var(--easing), transform var(--motion-quick) var(--easing);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .btn-primary { background: var(--accent); color: var(--accent-on); }
-  .btn-primary:hover { background: var(--accent-hover); }
-  .btn-primary:active { transform: scale(0.98); }
-  .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-strong); }
-  .btn-secondary:hover { background: var(--surface-sunken); }
-  .btn-ghost { background: transparent; color: var(--text-primary); }
-  .btn-ghost:hover { background: var(--surface-sunken); }
-  .btn-full { width: 100%; }
-  .btn-lg { height: 56px; padding: 0 24px; font-size: 15px; }
-
-  .input {
-    width: 100%;
-    height: 56px;
-    background: var(--surface-sunken);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 0 16px;
-    font-family: var(--font-sans);
-    font-size: 15px;
-    color: var(--text-primary);
-    transition: border-color var(--motion-quick) var(--easing);
-  }
-  .input:focus { outline: none; border: 2px solid var(--accent); padding: 0 15px; }
-  .input::placeholder { color: var(--text-tertiary); }
-  .field-label { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: var(--space-2); display: block; }
-  .field-help { font-size: 12px; color: var(--text-tertiary); margin-top: var(--space-2); }
-
-  .card {
-    background: var(--surface-raised);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    box-shadow: var(--elev-2);
-    border: 1px solid var(--border);
-  }
-
-  .list-tile {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    padding: 16px 20px;
-    min-height: 64px;
-    background: var(--surface-raised);
-    border-bottom: 1px solid var(--border);
-    text-decoration: none;
-    color: inherit;
-  }
-  .list-tile:last-child { border-bottom: none; }
-  .list-tile-avatar { width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--accent-surface); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
-  .list-tile-text { flex: 1; min-width: 0; }
-  .list-tile-title { font-size: 17px; font-weight: 500; }
-  .list-tile-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-  .list-tile-trail { color: var(--text-tertiary); }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: var(--radius-full);
-    background: var(--surface-sunken);
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid transparent;
-  }
-  .chip-active { background: var(--accent-surface); color: var(--accent); }
-  .chip-success { background: rgba(74,124,89,0.12); color: var(--success); }
-
-  .pill-day {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 56px;
-    height: 72px;
-    border-radius: var(--radius-lg);
-    background: var(--surface-sunken);
-    color: var(--text-secondary);
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all var(--motion-quick) var(--easing);
-    flex-shrink: 0;
-  }
-  .pill-day-active { background: var(--accent); color: var(--accent-on); }
-  .pill-day-num { font-size: 20px; font-weight: 600; font-family: var(--font-serif); }
-  .pill-day-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
-
-  .capacity-bar { height: 4px; background: var(--surface-sunken); border-radius: var(--radius-full); overflow: hidden; }
-  .capacity-bar-fill { height: 100%; background: var(--accent); border-radius: var(--radius-full); transition: width var(--motion-default) var(--easing); }
-
-  /* ===== Phone frames ===== */
-  .phones {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: var(--space-7);
-    justify-items: center;
-  }
-  .phone {
-    width: 340px;
-    height: 720px;
-    border-radius: 42px;
-    background: var(--surface);
-    border: 8px solid #2A2622;
-    box-shadow: var(--elev-3);
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-  [data-theme="dark"] .phone { border-color: #4A4338; }
-  .phone-notch {
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 24px;
-    background: #2A2622;
-    border-radius: 12px;
-    z-index: 10;
-  }
-  [data-theme="dark"] .phone-notch { background: #4A4338; }
-  .status-bar {
-    height: 44px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 var(--space-5);
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .phone-body { flex: 1; overflow-y: auto; padding-bottom: var(--space-6); }
-  .phone-caption { text-align: center; margin-top: var(--space-4); font-size: 13px; color: var(--text-tertiary); font-weight: 500; }
-
-  /* App bar inside phone */
-  .app-bar {
-    padding: var(--space-3) var(--space-5) var(--space-2);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .app-bar-title { font-family: var(--font-serif); font-size: 22px; font-weight: 400; }
-  .icon-btn {
-    width: 40px; height: 40px;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--border);
-    background: var(--surface-raised);
-    color: var(--text-primary);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-  }
-
-  /* Bottom nav */
-  .bottom-nav {
-    display: flex;
-    justify-content: space-around;
-    padding: var(--space-2) var(--space-5) var(--space-4);
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-  }
-  .bottom-nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    color: var(--text-tertiary);
-    font-size: 11px;
-    font-weight: 500;
-    padding: var(--space-2);
-  }
-  .bottom-nav-item.active { color: var(--accent); }
-  .bottom-nav-item-icon { font-size: 22px; }
-
-  /* Welcome */
-  .welcome { padding: var(--space-7) var(--space-5) var(--space-5); display: flex; flex-direction: column; height: 100%; }
-  .welcome-logo { width: 72px; height: 72px; border-radius: var(--radius-xl); background: var(--accent-surface); display: flex; align-items: center; justify-content: center; color: var(--accent); font-family: var(--font-serif); font-size: 36px; font-weight: 600; margin-bottom: var(--space-6); }
-  .welcome-title { font-family: var(--font-serif); font-size: 36px; line-height: 44px; font-weight: 600; margin-bottom: var(--space-4); }
-  .welcome-body { font-size: 17px; line-height: 26px; color: var(--text-secondary); margin-bottom: var(--space-7); }
-  .welcome-cta-stack { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-3); }
-
-  /* Home screen */
-  .home { padding: var(--space-2) var(--space-5) var(--space-6); }
-  .greeting { font-family: var(--font-serif); font-size: 28px; line-height: 36px; font-weight: 600; margin: var(--space-3) 0 var(--space-2); }
-  .greeting-sub { color: var(--text-secondary); font-size: 14px; margin-bottom: var(--space-6); }
-  .enter-club {
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-    border-radius: var(--radius-xl);
-    padding: var(--space-6) var(--space-5);
-    color: var(--accent-on);
-    box-shadow: var(--elev-2);
-    margin-bottom: var(--space-6);
-    cursor: pointer;
-  }
-  .enter-club-label { font-size: 13px; font-weight: 500; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
-  .enter-club-title { font-family: var(--font-serif); font-size: 28px; line-height: 36px; font-weight: 600; margin: var(--space-2) 0 var(--space-4); }
-  .enter-club-hint { display: flex; align-items: center; gap: var(--space-2); font-size: 14px; opacity: 0.9; }
-  .nfc-icon { width: 36px; height: 36px; border-radius: var(--radius-full); background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; }
-
-  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-3); }
-  .section-head h3 { font-size: 16px; font-weight: 600; }
-  .section-head a { font-size: 13px; color: var(--accent); text-decoration: none; }
-
-  .upcoming-card { padding: var(--space-5); margin-bottom: var(--space-5); }
-  .upcoming-time { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; }
-  .upcoming-title { font-family: var(--font-serif); font-size: 22px; font-weight: 600; margin: var(--space-2) 0; }
-  .upcoming-meta { color: var(--text-secondary); font-size: 14px; margin-bottom: var(--space-4); }
-
-  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
-  .stat { padding: var(--space-4); background: var(--surface-sunken); border-radius: var(--radius-lg); }
-  .stat-num { font-family: var(--font-serif); font-size: 28px; font-weight: 600; line-height: 1; }
-  .stat-label { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-
-  /* Schedule */
-  .day-pills { display: flex; gap: var(--space-2); padding: var(--space-4) var(--space-5); overflow-x: auto; }
-  .schedule-list { padding: 0 var(--space-5); }
-  .class-row { padding: var(--space-4) 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 56px 1fr auto; gap: var(--space-4); align-items: center; }
-  .class-row:last-child { border-bottom: none; }
-  .class-time { font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--text-primary); }
-  .class-time-end { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
-  .class-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-  .class-instructor { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
-  .capacity-text { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
-  .book-btn {
-    border: 1px solid var(--border-strong);
-    background: transparent;
-    color: var(--text-primary);
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .book-btn-full { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
-
-  /* Class detail */
-  .detail-hero {
-    background: linear-gradient(160deg, var(--accent-surface), var(--surface));
-    padding: var(--space-6) var(--space-5);
-  }
-  .detail-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); text-decoration: none; font-size: 14px; margin-bottom: var(--space-5); }
-  .detail-category { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-  .detail-title { font-family: var(--font-serif); font-size: 32px; line-height: 40px; font-weight: 600; margin: var(--space-2) 0 var(--space-4); }
-  .detail-meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .detail-body-wrap { padding: var(--space-5); }
-  .detail-instructor { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) 0; border-bottom: 1px solid var(--border); margin-bottom: var(--space-4); }
-  .instructor-avatar { width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--accent-surface); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 18px; }
-  .detail-desc { color: var(--text-secondary); font-size: 15px; line-height: 24px; margin-bottom: var(--space-6); }
-  .detail-foot {
-    border-top: 1px solid var(--border);
-    padding: var(--space-4) var(--space-5);
-    background: var(--surface);
-  }
-  .detail-policy { font-size: 12px; color: var(--text-tertiary); margin-top: var(--space-2); text-align: center; }
-
-  /* Profile */
-  .profile-head { padding: var(--space-6) var(--space-5) var(--space-4); text-align: center; }
-  .profile-avatar { width: 88px; height: 88px; border-radius: var(--radius-full); background: var(--accent-surface); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 36px; font-weight: 600; margin-bottom: var(--space-4); }
-  .profile-name { font-family: var(--font-serif); font-size: 24px; font-weight: 600; }
-  .profile-since { font-size: 13px; color: var(--text-tertiary); margin-top: var(--space-1); }
-  .profile-nfc {
-    margin: var(--space-5) var(--space-5) var(--space-5);
-    padding: var(--space-5);
-    border-radius: var(--radius-xl);
-    background: var(--surface-sunken);
-    display: flex; align-items: center; gap: var(--space-4);
-  }
-  .profile-nfc-icon { width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--accent-surface); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; }
-  .profile-nfc-text { flex: 1; }
-  .profile-nfc-label { font-size: 12px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-  .profile-nfc-value { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-top: 2px; }
-  .settings-list { background: var(--surface-raised); margin: 0 var(--space-5); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
-
-  /* Voice & tone examples */
-  .vt-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--border); }
-  .vt-bad, .vt-good { padding: var(--space-3); border-radius: var(--radius-md); font-size: 14px; }
-  .vt-bad { background: rgba(184,84,80,0.08); color: var(--text-secondary); text-decoration: line-through; text-decoration-color: var(--error); }
-  .vt-good { background: rgba(74,124,89,0.08); color: var(--text-primary); }
-
-  /* Footer */
-  .footer { text-align: center; padding: var(--space-7) var(--space-5); color: var(--text-tertiary); font-size: 13px; border-top: 1px solid var(--border); margin-top: var(--space-7); }
-  .footer a { color: var(--accent); }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>She-Gym — Design System (Lila Glow v2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">◐ Dark theme</button>
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">◐ Light</button>
 
-<header class="page-header">
-  <div style="font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3);">She-Gym · Design Preview · v1</div>
-  <h1 class="page-title">A calm, premium fitness app — in Claude's design language.</h1>
-  <p class="page-subtitle">Concrete tokens, components, and screens for review. Toggle the dark theme top-right. Each screen below is rendered with the same live tokens that will land in the Flutter codebase.</p>
+<header class="container" style="padding-top: var(--space-7); padding-bottom: var(--space-5);">
+  <span class="label-caps text-primary">She-Gym · Design System · v2 Lila Glow</span>
+  <h1 class="display-lg text-on-surface" style="margin-top: var(--space-3);">A sanctuary for women who train.</h1>
+  <p class="body-lg text-on-surface-variant" style="max-width: 640px; margin-top: var(--space-4);">
+    Live tokens, components, and screens. Every value here is the same value the Flutter app will ship with. Toggle the theme top-right.
+  </p>
+
+  <nav class="nav-pills" style="margin-top: var(--space-6);">
+    <a class="nav-pill" href="splash.html">Splash screen ↗</a>
+    <a class="nav-pill" href="#tokens">Tokens</a>
+    <a class="nav-pill" href="#type">Typography</a>
+    <a class="nav-pill" href="#components">Components</a>
+    <a class="nav-pill" href="#rule">DRY rule</a>
+  </nav>
 </header>
 
-<nav class="nav">
-  <a href="#colors">Colors</a>
-  <a href="#type">Typography</a>
-  <a href="#components">Components</a>
-  <a href="#screens">Screens</a>
-  <a href="#voice">Voice &amp; tone</a>
-</nav>
-
-<!-- ===== COLORS ===== -->
-<section class="section" id="colors">
-  <h2 class="section-title">Color tokens</h2>
-  <p class="section-lede">Warm cream surfaces, warm-brown text, restrained violet accent. Same tokens flip cleanly between light and dark.</p>
-  <div class="swatch-grid">
-    <div class="swatch"><div class="swatch-chip" style="background: var(--surface);"></div><div class="swatch-meta"><div class="swatch-name">surface</div><div class="swatch-hex" id="hex-surface">#FAF7F2</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--surface-raised); border-bottom: 1px solid var(--border);"></div><div class="swatch-meta"><div class="swatch-name">surface-raised</div><div class="swatch-hex">#FFFFFF / #25211D</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--surface-sunken);"></div><div class="swatch-meta"><div class="swatch-name">surface-sunken</div><div class="swatch-hex">#F2EEE5 / #14110F</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--text-primary);"></div><div class="swatch-meta"><div class="swatch-name">text-primary</div><div class="swatch-hex">#2A2622 / #F5F1EA</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--text-secondary);"></div><div class="swatch-meta"><div class="swatch-name">text-secondary</div><div class="swatch-hex">#6E6457 / #B5AC9F</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--accent);"></div><div class="swatch-meta"><div class="swatch-name">accent</div><div class="swatch-hex">#7E5BB8 / #9B7CD4</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--accent-surface);"></div><div class="swatch-meta"><div class="swatch-name">accent-surface</div><div class="swatch-hex">#F0EAFA / #2A2438</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--success);"></div><div class="swatch-meta"><div class="swatch-name">success</div><div class="swatch-hex">#4A7C59 / #6FA378</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--warning);"></div><div class="swatch-meta"><div class="swatch-name">warning</div><div class="swatch-hex">#C9963D / #D9AC5C</div></div></div>
-    <div class="swatch"><div class="swatch-chip" style="background: var(--error);"></div><div class="swatch-meta"><div class="swatch-name">error</div><div class="swatch-hex">#B85450 / #D17774</div></div></div>
+<!-- ============== DRY rule ============== -->
+<section class="container section" id="rule">
+  <div class="section-header">
+    <h2 class="headline-md">The Unified UI &amp; DRY Rule</h2>
+    <p class="section-lede body-md">One source of truth. One component, one implementation. Screens compose — they never restyle.</p>
+  </div>
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-card__title">1 · Tokens</div>
+      <p class="body-sm text-on-surface-variant">All colors, type, spacing, radius, motion live in <code>tokens.css</code> and <code>lib/core/theme/</code>. No hex literals or magic numbers in screens, ever.</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-card__title">2 · One component, one implementation</div>
+      <p class="body-sm text-on-surface-variant">Each button, card, input, tile exists once in <code>components.css</code> (and matching Flutter widgets). Screens reference; they don't fork.</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-card__title">3 · No inline overrides</div>
+      <p class="body-sm text-on-surface-variant">A new variant becomes a class. Inline <code>style=</code> attributes and re-skinned components are PR blockers.</p>
+    </div>
+    <div class="comp-card">
+      <div class="comp-card__title">4 · Cascade verified</div>
+      <p class="body-sm text-on-surface-variant">A token change updates every screen automatically. The component gallery on this page is the smoke test.</p>
+    </div>
   </div>
 </section>
 
-<!-- ===== TYPOGRAPHY ===== -->
-<section class="section" id="type">
-  <h2 class="section-title">Typography</h2>
-  <p class="section-lede">Source Serif 4 for headlines (editorial, warm). Inter for body (clean, readable). Tabular figures for schedules and prices.</p>
-  <div class="type-row"><div class="type-label">display-l 40/48</div><div class="display-l">Don't dream of it. Train for it.</div></div>
-  <div class="type-row"><div class="type-label">display-m 32/40</div><div class="display-m">Welcome back, Lara</div></div>
-  <div class="type-row"><div class="type-label">display-s 28/36</div><div class="display-s">This week at She-Gym</div></div>
-  <div class="type-row"><div class="type-label">heading-l 24/32</div><div class="heading-l">Tuesday, 21 May</div></div>
-  <div class="type-row"><div class="type-label">heading-m 20/28</div><div class="heading-m">Vinyasa Flow with Mia</div></div>
-  <div class="type-row"><div class="type-label">body-l 17/26</div><div class="body-l">A 60-minute flow class that links breath to movement. Suitable for all levels.</div></div>
-  <div class="type-row"><div class="type-label">body-m 15/24</div><div class="body-m">Your membership renews on 1 June. You'll be charged €79.</div></div>
-  <div class="type-row"><div class="type-label">body-s 13/20</div><div class="body-s">Last visited yesterday at 7:14 PM.</div></div>
-  <div class="type-row"><div class="type-label">caption 12/16</div><div class="caption">Updated just now</div></div>
+<!-- ============== Tokens ============== -->
+<section class="container section" id="tokens">
+  <div class="section-header">
+    <h2 class="headline-md">Color tokens</h2>
+    <p class="section-lede body-md">Same tokens, two themes. Toggle theme above to see the values flip.</p>
+  </div>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-background);"></div><div class="swatch__meta"><div class="swatch__name">background</div><div class="swatch__hex">--color-background</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-surface-container);"></div><div class="swatch__meta"><div class="swatch__name">surface-container</div><div class="swatch__hex">--color-surface-container</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-surface-container-high);"></div><div class="swatch__meta"><div class="swatch__name">surface-container-high</div><div class="swatch__hex">--color-surface-container-high</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-primary);"></div><div class="swatch__meta"><div class="swatch__name">primary</div><div class="swatch__hex">--color-primary</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-primary-container);"></div><div class="swatch__meta"><div class="swatch__name">primary-container</div><div class="swatch__hex">--color-primary-container</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-tertiary);"></div><div class="swatch__meta"><div class="swatch__name">tertiary</div><div class="swatch__hex">--color-tertiary</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-on-surface);"></div><div class="swatch__meta"><div class="swatch__name">on-surface</div><div class="swatch__hex">--color-on-surface</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-success);"></div><div class="swatch__meta"><div class="swatch__name">success</div><div class="swatch__hex">--color-success</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-warning);"></div><div class="swatch__meta"><div class="swatch__name">warning</div><div class="swatch__hex">--color-warning</div></div></div>
+    <div class="swatch"><div class="swatch__chip" style="background: var(--color-error);"></div><div class="swatch__meta"><div class="swatch__name">error</div><div class="swatch__hex">--color-error</div></div></div>
+  </div>
 </section>
 
-<!-- ===== COMPONENTS ===== -->
-<section class="section" id="components">
-  <h2 class="section-title">Component gallery</h2>
-  <p class="section-lede">Built from the same tokens. Hover the buttons; focus the input.</p>
+<!-- ============== Typography ============== -->
+<section class="container section" id="type">
+  <div class="section-header">
+    <h2 class="headline-md">Typography</h2>
+    <p class="section-lede body-md">Bricolage Grotesque for display, Manrope for body. Bold, modern, warm.</p>
+  </div>
+  <div class="type-row"><div class="type-row__label">display-lg</div><div class="display-lg text-primary text-glow">Strong You.</div></div>
+  <div class="type-row"><div class="type-row__label">headline-md</div><div class="headline-md">Welcome back, Lara</div></div>
+  <div class="type-row"><div class="type-row__label">headline-sm</div><div class="headline-sm">This week at She-Gym</div></div>
+  <div class="type-row"><div class="type-row__label">body-lg</div><div class="body-lg">A 60-minute flow class that links breath to movement.</div></div>
+  <div class="type-row"><div class="type-row__label">body-md</div><div class="body-md">Your membership renews on 1 June. You'll be charged €79.</div></div>
+  <div class="type-row"><div class="type-row__label">body-sm</div><div class="body-sm text-on-surface-variant">Last visited yesterday at 7:14 PM.</div></div>
+  <div class="type-row"><div class="type-row__label">label-caps</div><div class="label-caps text-cream-dim">Welcome to the sanctuary</div></div>
+</section>
+
+<!-- ============== Components ============== -->
+<section class="container section" id="components">
+  <div class="section-header">
+    <h2 class="headline-md">Component gallery</h2>
+    <p class="section-lede body-md">Hover the buttons, focus the input. Same components, both themes.</p>
+  </div>
   <div class="comp-grid">
 
     <div class="comp-card">
-      <div class="comp-title">Primary &amp; secondary buttons</div>
+      <div class="comp-card__title">Buttons</div>
       <div class="comp-stack">
-        <button class="btn btn-primary btn-full">Book class</button>
-        <button class="btn btn-secondary btn-full">Pause membership</button>
-        <button class="btn btn-ghost btn-full">Maybe later</button>
+        <button class="btn btn--primary btn--full">Become a member</button>
+        <button class="btn btn--secondary btn--full">Pause membership</button>
+        <button class="btn btn--ghost btn--full">Maybe later</button>
       </div>
     </div>
 
     <div class="comp-card">
-      <div class="comp-title">Text input</div>
-      <div class="comp-stack">
-        <div>
-          <label class="field-label">Email</label>
-          <input class="input" type="email" placeholder="you@example.com" />
-          <div class="field-help">We'll send a verification link.</div>
-        </div>
-      </div>
+      <div class="comp-card__title">Input</div>
+      <label class="field-label" for="demo-email">Email</label>
+      <input id="demo-email" class="input" type="email" placeholder="you@example.com" />
+      <div class="field-help">We'll send a verification link.</div>
     </div>
 
     <div class="comp-card">
-      <div class="comp-title">Card</div>
+      <div class="comp-card__title">Card</div>
       <div class="card">
-        <div style="font-family: var(--font-serif); font-size: 20px; font-weight: 600;">Your next class</div>
-        <div style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Vinyasa Flow · Tomorrow at 7:00 AM</div>
-        <button class="btn btn-primary" style="margin-top: 16px;">View details</button>
+        <div class="headline-sm">Your next class</div>
+        <p class="body-sm text-on-surface-variant" style="margin-top: var(--space-1);">Vinyasa Flow · Tomorrow at 7:00 AM</p>
+        <button class="btn btn--primary" style="margin-top: var(--space-4);">View details</button>
       </div>
     </div>
 
     <div class="comp-card">
-      <div class="comp-title">List tiles</div>
-      <div style="background: var(--surface-raised); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border);">
-        <div class="list-tile">
-          <div class="list-tile-avatar">M</div>
-          <div class="list-tile-text">
-            <div class="list-tile-title">Mia Tanaka</div>
-            <div class="list-tile-subtitle">Yoga · 12 years experience</div>
+      <div class="comp-card__title">List tiles</div>
+      <div style="background: var(--color-surface-container); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-outline-variant);">
+        <a href="#" class="list-tile">
+          <div class="list-tile__avatar">M</div>
+          <div class="list-tile__text">
+            <div class="list-tile__title">Mia Tanaka</div>
+            <div class="list-tile__subtitle">Yoga · 12 years experience</div>
           </div>
-          <div class="list-tile-trail">›</div>
-        </div>
-        <div class="list-tile">
-          <div class="list-tile-avatar">S</div>
-          <div class="list-tile-text">
-            <div class="list-tile-title">Sara Lindqvist</div>
-            <div class="list-tile-subtitle">Strength · 8 years experience</div>
+          <div class="list-tile__trail">›</div>
+        </a>
+        <a href="#" class="list-tile">
+          <div class="list-tile__avatar">S</div>
+          <div class="list-tile__text">
+            <div class="list-tile__title">Sara Lindqvist</div>
+            <div class="list-tile__subtitle">Strength · 8 years experience</div>
           </div>
-          <div class="list-tile-trail">›</div>
-        </div>
+          <div class="list-tile__trail">›</div>
+        </a>
       </div>
     </div>
 
     <div class="comp-card">
-      <div class="comp-title">Chips</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-        <span class="chip">All categories</span>
-        <span class="chip chip-active">Yoga</span>
+      <div class="comp-card__title">Chips</div>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+        <span class="chip">All</span>
+        <span class="chip chip--active">Yoga</span>
         <span class="chip">HIIT</span>
         <span class="chip">Strength</span>
-        <span class="chip chip-success">✓ Booked</span>
+        <span class="chip chip--success">✓ Booked</span>
       </div>
     </div>
 
     <div class="comp-card">
-      <div class="comp-title">Empty state</div>
-      <div style="text-align: center; padding: 24px 16px;">
-        <div style="font-family: var(--font-serif); font-size: 22px; font-weight: 600; margin-bottom: 8px;">Nothing booked yet</div>
-        <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">Pick a class to get started.</div>
-        <button class="btn btn-primary">Browse schedule</button>
+      <div class="comp-card__title">Empty state</div>
+      <div style="text-align: center; padding: var(--space-5) 0;">
+        <div class="headline-sm">Nothing booked yet</div>
+        <p class="body-sm text-on-surface-variant" style="margin: var(--space-2) 0 var(--space-4);">Pick a class to get started.</p>
+        <button class="btn btn--primary">Browse schedule</button>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ===== SCREENS ===== -->
-<section class="section" id="screens">
-  <h2 class="section-title">App screens</h2>
-  <p class="section-lede">Five representative screens — toggle dark theme above to see both modes.</p>
-
-  <div class="phones">
-
-    <!-- Welcome -->
-    <div>
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="status-bar"><span>9:41</span><span>● ● ● 100%</span></div>
-        <div class="phone-body">
-          <div class="welcome">
-            <div class="welcome-logo">S</div>
-            <div class="welcome-title">A space that's yours.</div>
-            <div class="welcome-body">She-Gym is a private fitness club, designed around how you actually train. Become a member to book classes, work with a trainer, and walk in with a tap.</div>
-            <div class="welcome-cta-stack">
-              <button class="btn btn-primary btn-lg btn-full">Become a member</button>
-              <button class="btn btn-ghost btn-full">I already have an account</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="phone-caption">Welcome</div>
-    </div>
-
-    <!-- Home / Dashboard -->
-    <div>
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="status-bar"><span>9:41</span><span>● ● ● 100%</span></div>
-        <div class="phone-body">
-          <div class="home">
-            <div class="greeting">Good morning, Lara.</div>
-            <div class="greeting-sub">Tuesday, 21 May</div>
-
-            <div class="enter-club">
-              <div class="enter-club-label">Tap to enter</div>
-              <div class="enter-club-title">Hold your wristband at the gate.</div>
-              <div class="enter-club-hint">
-                <div class="nfc-icon">⌇</div>
-                <span>NFC active · membership in good standing</span>
-              </div>
-            </div>
-
-            <div class="section-head"><h3>Up next</h3><a href="#">View schedule</a></div>
-            <div class="card upcoming-card">
-              <div class="upcoming-time">Tomorrow · 7:00 AM</div>
-              <div class="upcoming-title">Vinyasa Flow</div>
-              <div class="upcoming-meta">with Mia Tanaka · Studio A · 60 min</div>
-              <button class="btn btn-secondary btn-full">View details</button>
-            </div>
-
-            <div class="section-head"><h3>This month</h3></div>
-            <div class="stat-row">
-              <div class="stat"><div class="stat-num">12</div><div class="stat-label">Visits</div></div>
-              <div class="stat"><div class="stat-num">8</div><div class="stat-label">Classes</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="bottom-nav">
-          <div class="bottom-nav-item active"><div class="bottom-nav-item-icon">●</div>Home</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">▢</div>Schedule</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">△</div>Trainers</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">○</div>Profile</div>
-        </div>
-      </div>
-      <div class="phone-caption">Home / Dashboard</div>
-    </div>
-
-    <!-- Schedule -->
-    <div>
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="status-bar"><span>9:41</span><span>● ● ● 100%</span></div>
-        <div class="phone-body">
-          <div class="app-bar">
-            <div class="app-bar-title">Schedule</div>
-            <div class="icon-btn">⌕</div>
-          </div>
-          <div class="day-pills">
-            <div class="pill-day"><div class="pill-day-num">20</div><div class="pill-day-label">Mon</div></div>
-            <div class="pill-day pill-day-active"><div class="pill-day-num">21</div><div class="pill-day-label">Tue</div></div>
-            <div class="pill-day"><div class="pill-day-num">22</div><div class="pill-day-label">Wed</div></div>
-            <div class="pill-day"><div class="pill-day-num">23</div><div class="pill-day-label">Thu</div></div>
-            <div class="pill-day"><div class="pill-day-num">24</div><div class="pill-day-label">Fri</div></div>
-            <div class="pill-day"><div class="pill-day-num">25</div><div class="pill-day-label">Sat</div></div>
-          </div>
-          <div class="schedule-list">
-            <div class="class-row">
-              <div><div class="class-time">07:00</div><div class="class-time-end">→ 08:00</div></div>
-              <div>
-                <div class="class-name">Vinyasa Flow</div>
-                <div class="class-instructor">Mia Tanaka · Studio A</div>
-                <div class="capacity-bar"><div class="capacity-bar-fill" style="width: 60%;"></div></div>
-                <div class="capacity-text">12 of 20 booked</div>
-              </div>
-              <button class="book-btn book-btn-full">Booked</button>
-            </div>
-            <div class="class-row">
-              <div><div class="class-time">09:30</div><div class="class-time-end">→ 10:15</div></div>
-              <div>
-                <div class="class-name">HIIT 45</div>
-                <div class="class-instructor">Sara Lindqvist · Studio B</div>
-                <div class="capacity-bar"><div class="capacity-bar-fill" style="width: 90%;"></div></div>
-                <div class="capacity-text">18 of 20 booked</div>
-              </div>
-              <button class="book-btn">Book</button>
-            </div>
-            <div class="class-row">
-              <div><div class="class-time">12:15</div><div class="class-time-end">→ 13:00</div></div>
-              <div>
-                <div class="class-name">Pilates Reformer</div>
-                <div class="class-instructor">Elena Russo · Studio A</div>
-                <div class="capacity-bar"><div class="capacity-bar-fill" style="width: 25%;"></div></div>
-                <div class="capacity-text">3 of 12 booked</div>
-              </div>
-              <button class="book-btn">Book</button>
-            </div>
-            <div class="class-row">
-              <div><div class="class-time">18:00</div><div class="class-time-end">→ 19:00</div></div>
-              <div>
-                <div class="class-name">Strength Circuit</div>
-                <div class="class-instructor">Sara Lindqvist · Studio B</div>
-                <div class="capacity-bar"><div class="capacity-bar-fill" style="width: 100%;"></div></div>
-                <div class="capacity-text" style="color: var(--warning);">Full · waitlist open</div>
-              </div>
-              <button class="book-btn">Waitlist</button>
-            </div>
-          </div>
-        </div>
-        <div class="bottom-nav">
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">●</div>Home</div>
-          <div class="bottom-nav-item active"><div class="bottom-nav-item-icon">▢</div>Schedule</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">△</div>Trainers</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">○</div>Profile</div>
-        </div>
-      </div>
-      <div class="phone-caption">Class schedule</div>
-    </div>
-
-    <!-- Class detail -->
-    <div>
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="status-bar"><span>9:41</span><span>● ● ● 100%</span></div>
-        <div class="phone-body" style="padding-bottom: 0;">
-          <div class="detail-hero">
-            <a href="#" class="detail-back">← Tuesday, 21 May</a>
-            <div class="detail-category">Yoga</div>
-            <div class="detail-title">Vinyasa Flow</div>
-            <div class="detail-meta">
-              <span class="chip">60 min</span>
-              <span class="chip">All levels</span>
-              <span class="chip">Studio A</span>
-            </div>
-          </div>
-          <div class="detail-body-wrap">
-            <div class="detail-instructor">
-              <div class="instructor-avatar">M</div>
-              <div>
-                <div style="font-weight: 600;">Mia Tanaka</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">Yoga · 12 years</div>
-              </div>
-            </div>
-            <p class="detail-desc">A 60-minute flowing practice that links breath to movement. Expect sun salutations, balancing poses, and a quiet closing. Bring water; mats provided.</p>
-            <div class="section-head"><h3 style="font-family: var(--font-serif); font-weight: 600; font-size: 18px;">Capacity</h3><span style="font-size: 13px; color: var(--text-secondary);">12 of 20 booked</span></div>
-            <div class="capacity-bar"><div class="capacity-bar-fill" style="width: 60%;"></div></div>
-          </div>
-        </div>
-        <div class="detail-foot">
-          <button class="btn btn-primary btn-lg btn-full">Book — included in your plan</button>
-          <div class="detail-policy">Free cancellation up to 4 hours before.</div>
-        </div>
-      </div>
-      <div class="phone-caption">Class detail / booking</div>
-    </div>
-
-    <!-- Profile -->
-    <div>
-      <div class="phone">
-        <div class="phone-notch"></div>
-        <div class="status-bar"><span>9:41</span><span>● ● ● 100%</span></div>
-        <div class="phone-body">
-          <div class="profile-head">
-            <div class="profile-avatar">L</div>
-            <div class="profile-name">Lara Schmidt</div>
-            <div class="profile-since">Member since March 2026</div>
-          </div>
-          <div class="profile-nfc">
-            <div class="profile-nfc-icon">⌇</div>
-            <div class="profile-nfc-text">
-              <div class="profile-nfc-label">Your NFC wristband</div>
-              <div class="profile-nfc-value">•••• 4A29</div>
-            </div>
-            <span class="chip chip-success">Active</span>
-          </div>
-          <div class="settings-list">
-            <a href="#" class="list-tile">
-              <div class="list-tile-avatar">★</div>
-              <div class="list-tile-text"><div class="list-tile-title">Membership</div><div class="list-tile-subtitle">Flex monthly · renews 1 June</div></div>
-              <div class="list-tile-trail">›</div>
-            </a>
-            <a href="#" class="list-tile">
-              <div class="list-tile-avatar">€</div>
-              <div class="list-tile-text"><div class="list-tile-title">Billing</div><div class="list-tile-subtitle">Manage payment &amp; invoices</div></div>
-              <div class="list-tile-trail">›</div>
-            </a>
-            <a href="#" class="list-tile">
-              <div class="list-tile-avatar">⚐</div>
-              <div class="list-tile-text"><div class="list-tile-title">Notifications</div><div class="list-tile-subtitle">Class reminders, payments</div></div>
-              <div class="list-tile-trail">›</div>
-            </a>
-            <a href="#" class="list-tile">
-              <div class="list-tile-avatar">?</div>
-              <div class="list-tile-text"><div class="list-tile-title">Help &amp; support</div><div class="list-tile-subtitle">Contact the club</div></div>
-              <div class="list-tile-trail">›</div>
-            </a>
-          </div>
-          <div style="padding: var(--space-5);">
-            <button class="btn btn-secondary btn-full">Sign out</button>
-          </div>
-        </div>
-        <div class="bottom-nav">
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">●</div>Home</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">▢</div>Schedule</div>
-          <div class="bottom-nav-item"><div class="bottom-nav-item-icon">△</div>Trainers</div>
-          <div class="bottom-nav-item active"><div class="bottom-nav-item-icon">○</div>Profile</div>
-        </div>
-      </div>
-      <div class="phone-caption">Profile</div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ===== Voice & tone ===== -->
-<section class="section" id="voice">
-  <h2 class="section-title">Voice &amp; tone</h2>
-  <p class="section-lede">Warm, second-person, never bossy. Explains what happened and what to do next.</p>
-  <div>
-    <div class="vt-row">
-      <div class="vt-bad">Invalid OTP.</div>
-      <div class="vt-good">That code didn't match. Try again, or request a fresh one.</div>
-    </div>
-    <div class="vt-row">
-      <div class="vt-bad">Subscription required.</div>
-      <div class="vt-good">Your membership is paused — resume it to book classes.</div>
-    </div>
-    <div class="vt-row">
-      <div class="vt-bad">Error 500.</div>
-      <div class="vt-good">Something went wrong on our end. We'll be back in a moment.</div>
-    </div>
-    <div class="vt-row">
-      <div class="vt-bad">Are you sure?</div>
-      <div class="vt-good">Cancel this booking? You'll get a refund if you cancel before 4 PM.</div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  She-Gym design preview · v1 · 2026-05-20 · Claude-inspired design language
+<!-- ============== Footer ============== -->
+<footer class="container section" style="text-align: center;">
+  <span class="label-caps text-cream-dim">She-Gym Design System · v2 Lila Glow · 2026-05-20</span>
 </footer>
 
 <script>
@@ -924,7 +179,7 @@
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
     html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('theme-btn').textContent = isDark ? '◐ Dark theme' : '◑ Light theme';
+    document.getElementById('theme-btn').textContent = isDark ? '◑ Dark' : '◐ Light';
   }
 </script>
 
