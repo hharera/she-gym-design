@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>She-Gym — Welcome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">◐ Light</button>
+
+<main class="splash">
+
+  <!-- Atmospheric glows (token-driven) -->
+  <div class="glow-orb glow-orb--primary glow-orb--top-left" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--tertiary glow-orb--bottom-right" aria-hidden="true"></div>
+
+  <!-- Decorative edge streaks -->
+  <div class="edge-streaks" aria-hidden="true">
+    <svg viewBox="0 0 400 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="streakGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"  stop-color="var(--color-primary)" stop-opacity="0"/>
+          <stop offset="50%" stop-color="var(--color-primary)" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="var(--color-primary)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Left curve -->
+      <path d="M -20 200 Q 60 380 -20 600" fill="none" stroke="url(#streakGrad)" stroke-width="1.5" />
+      <path d="M 20 100 Q 100 350 30 700" fill="none" stroke="url(#streakGrad)" stroke-width="1" opacity="0.5" />
+      <!-- Right curve -->
+      <path d="M 420 150 Q 320 380 420 650" fill="none" stroke="url(#streakGrad)" stroke-width="1.5" />
+      <path d="M 380 80 Q 280 350 370 720" fill="none" stroke="url(#streakGrad)" stroke-width="1" opacity="0.5" />
+    </svg>
+  </div>
+
+  <!-- Hero content -->
+  <div class="splash__content">
+
+    <div class="logo-container">
+      <svg class="logo-mark" viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SheGym">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="var(--color-primary)"/>
+            <stop offset="100%" stop-color="var(--color-tertiary)"/>
+          </linearGradient>
+        </defs>
+        <!-- Decorative ring -->
+        <circle cx="210" cy="90" r="78" fill="none" stroke="url(#logoGrad)" stroke-width="2" opacity="0.6"/>
+        <circle cx="210" cy="90" r="64" fill="var(--color-surface-container)" />
+        <!-- Monogram -->
+        <text x="210" y="115" text-anchor="middle"
+              font-family="Bricolage Grotesque, serif"
+              font-size="72" font-weight="800"
+              fill="url(#logoGrad)">SG</text>
+        <!-- Wordmark -->
+        <text x="210" y="195" text-anchor="middle"
+              font-family="Bricolage Grotesque, serif"
+              font-size="32" font-weight="800"
+              letter-spacing="-1"
+              fill="var(--color-on-surface)">SheGym</text>
+      </svg>
+    </div>
+
+    <div class="splash__tagline fade-in fade-in--delay-1">
+      <h1 class="display-lg text-primary text-glow">
+        Strong Mind.<br>
+        Strong Body.<br>
+        Strong You.
+      </h1>
+    </div>
+
+    <div class="splash__ctas fade-in fade-in--delay-2">
+      <a href="#" class="btn btn--primary btn--lg btn--pill btn--full">Get Started</a>
+      <a href="#" class="btn btn--secondary btn--lg btn--pill btn--full">Log In</a>
+    </div>
+
+  </div>
+
+  <!-- Footer legal links -->
+  <div class="splash__footer">
+    <nav class="footer-links">
+      <a href="#">Terms of Service</a>
+      <span class="footer-links__sep">•</span>
+      <a href="#">Privacy Policy</a>
+    </nav>
+  </div>
+
+</main>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-btn').textContent = isDark ? '◑ Dark' : '◐ Light';
+  }
+</script>
+
+</body>
+</html>
